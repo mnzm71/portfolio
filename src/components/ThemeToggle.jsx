@@ -76,9 +76,9 @@ export default function ThemeToggle() {
                 </div>
 
                 {/* متن اصلی */}
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 dark:text-white drop-shadow-lg animate-[glowText_4s_ease-in-out_infinite] leading-snug text-center px-4">
+                <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-5xl font-bold text-gray-800 dark:text-white drop-shadow-lg animate-[glowText_4s_ease-in-out_infinite] leading-snug text-center px-4">
                     نسخه آزمایشی طراحی سایت توسط
-                    <span className="block mt-2 text-yellow-300 dark:text-yellow-400">
+                    <span className="block mt-2 text-red-500 dark:text-red-400">
                         محمد نادی‌زاده میرزایی
                     </span>
                 </h1>
