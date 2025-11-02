@@ -20,20 +20,39 @@ const projects = [
         image: "/images/personal-website.png",
         link: "#",
     },
+    {
+        title: "برنامه نویسی ویندوز",
+        description: "طراحی نرم افزارهای حسابداری و مدیریتی با زبان #C برای ویندوز",
+        image: "/images/csharp.jpg",
+        link: "#",
+    },
+    {
+        title: "پایگاه داده",
+        description: "طراحی و مدیریت پایگاه داده برای اپلیکیشن‌های وب و دسکتاپ",
+        image: "/images/database.jpeg",
+        link: "#",
+    },
+    {
+        title: "سایر مهارت‌ها",
+        description: "تجربه در بازی‌سازی با Unity و امور شبکه‌های کامپیوتری",
+        image: "/images/other.jpg",
+        link: "#",
+    },
 ];
 
 export default function Portfolio() {
     return (
-        <section className="min-h-screen py-20 relative" id="projects">
+        <section className="min-h-screen py-20 relative" id="projects" dir="rtl">
             <div className="relative max-w-6xl mx-auto px-6">
                 <motion.h1
                     className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    توانایی های برنامه نویسی                </motion.h1>
+                    توانایی‌های برنامه‌نویسی
+                </motion.h1>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 text-right">
                     {projects.map((project, index) => (
                         <motion.div
                             key={index}
@@ -52,10 +71,9 @@ export default function Portfolio() {
                                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                                     {project.title}
                                 </h2>
-                                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
                                     {project.description}
                                 </p>
-
                             </div>
                         </motion.div>
                     ))}
