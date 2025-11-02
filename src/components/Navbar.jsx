@@ -9,7 +9,7 @@ export default function Navbar() {
         { name: "خانه", href: "#home" },
         { name: "درباره ما", href: "#about" },
         { name: "مهارت‌ها", href: "#skille" },
-        { name: "نمونه کارها", href: "#projects" },
+        { name: "توانایی ها", href: "#projects" },
         { name: "تماس با ما", href: "#contact" },
     ];
 

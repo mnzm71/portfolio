@@ -58,10 +58,10 @@ export default function ThemeToggle() {
 
             {/* بنر ثابت سمت چپ بالا (حالت تاریک: نور ماه) */}
             <div
-                className={`hidden sm:block fixed top-24 left-4 w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden border-4 
-  border-[conic-gradient(from_0deg,_#ffb300,_#ff005c,_#7a00ff,_#00ccff,_#00ff88,_#ffb300)] 
-  shadow-[0_0_50px_15px_rgba(255,255,255,0.4)] z-20 transition-colors duration-500 
-  ${theme === "dark" ? "bg-gray-200/20 backdrop-blur-md" : "bg-transparent"}`}
+                className={`hidden xl:block fixed top-24 left-4 w-40 h-40 sm:w-48 sm:h-48 rounded-full overflow-hidden border-4 
+border-[conic-gradient(from_0deg,_#ffb300,_#ff005c,_#7a00ff,_#00ccff,_#00ff88,_#ffb300)] 
+shadow-[0_0_50px_15px_rgba(255,255,255,0.4)] z-20 transition-colors duration-500 
+${theme === "dark" ? "bg-gray-200/20 backdrop-blur-md" : "bg-transparent"}`}
             >
                 <img
                     src="/icon.png"
@@ -69,6 +69,7 @@ export default function ThemeToggle() {
                     className="w-full h-full object-cover"
                 />
             </div>
+
 
 
 
