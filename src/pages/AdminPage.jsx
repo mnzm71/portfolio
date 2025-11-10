@@ -1,55 +1,109 @@
 import { useState, useEffect } from "react";
 
-export default function AdminPage() {
-    const [pendingComments, setPendingComments] = useState([]);
-    const apiUrl = "https://comments-worker.mnzm1371.workers.dev";
+export default function AdminPanel() {
+    const [password, setPassword] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [comments, setComments] = useState([]);
+    const apiUrl = "https://comments-worker.mnzm1371.workers.dev"; // URL Worker شما
 
-    const fetchPendingComments = async () => {
-        try {
-            const res = await fetch(`${apiUrl}/comments?status=pending`);
-            const data = await res.json();
-            setPendingComments(data);
-        } catch (error) {
-            console.error("خطا در دریافت نظرات pending:", error);
+    // ورود مدیر
+    const handleLogin = () => {
+        // نمونه رمز: admin123
+        if (password === "admin123") {
+            setIsLoggedIn(true);
+            fetchComments();
+        } else {
+            alert("رمز اشتباه است!");
         }
     };
 
+    // دریافت تمام نظرات (تایید شده و نشده)
+    const fetchComments = async () => {
+        try {
+            const res = await fetch(`${apiUrl}/all-comments`);
+            const data = await res.json();
+            setComments(data);
+        } catch (error) {
+            console.error("خطا در دریافت نظرات:", error);
+        }
+    };
+
+    // تایید نظر
     const approveComment = async (id) => {
         try {
             const res = await fetch(`${apiUrl}/approve/${id}`, { method: "POST" });
-            if (res.ok) {
-                alert("نظر تایید شد ✅");
-                fetchPendingComments();
-            } else {
-                alert("خطا در تایید نظر 😕");
-            }
+            if (res.ok) fetchComments();
         } catch (error) {
-            console.error("خطا در تایید نظر:", error);
+            console.error(error);
         }
     };
 
-    useEffect(() => {
-        fetchPendingComments();
-    }, []);
+    // حذف نظر
+    const deleteComment = async (id) => {
+        try {
+            const res = await fetch(`${apiUrl}/delete/${id}`, { method: "DELETE" });
+            if (res.ok) fetchComments();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    if (!isLoggedIn) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-800 text-white">
+                <div className="bg-gray-700 p-8 rounded-xl shadow-lg">
+                    <h2 className="text-2xl mb-4 text-center">ورود مدیر</h2>
+                    <input
+                        type="password"
+                        placeholder="رمز ورود"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full p-3 mb-4 rounded-lg text-black"
+                    />
+                    <button
+                        onClick={handleLogin}
+                        className="w-full bg-red-600 hover:bg-red-700 p-3 rounded-lg font-semibold"
+                    >
+                        ورود
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 text-right" dir="rtl">
-            <h2 className="text-3xl font-bold text-white mb-6 text-center">پنل مدیریت نظرات</h2>
-            <div className="w-full max-w-4xl space-y-3">
-                {pendingComments.length === 0 ? (
-                    <p className="text-gray-400 text-center">نظری برای تایید وجود ندارد</p>
+        <div className="min-h-screen p-6 bg-gray-900 text-white">
+            <h2 className="text-3xl font-bold mb-6 text-center">پنل مدیریت نظرات</h2>
+            <div className="space-y-4 max-w-4xl mx-auto">
+                {comments.length === 0 ? (
+                    <p className="text-gray-400 text-center">هیچ نظری ثبت نشده است.</p>
                 ) : (
-                    pendingComments.map((c) => (
-                        <div key={c.id} className="border border-gray-700 rounded-lg p-4 bg-gray-700/60 text-gray-100 flex justify-between items-center">
-                            <div>
-                                <div className="flex justify-between mb-1 text-sm text-gray-400">
-                                    <span>{c.name}</span>
-                                    <span>{new Date(c.date).toLocaleDateString("fa-IR")}</span>
-                                </div>
-                                <p>{c.comment}</p>
+                    comments.map((c) => (
+                        <div
+                            key={c.id}
+                            className={`p-4 rounded-lg border ${c.status === "approved"
+                                ? "border-green-500 bg-green-800/40"
+                                : "border-yellow-500 bg-yellow-800/40"
+                                }`}
+                        >
+                            <div className="flex justify-between mb-2 text-sm text-gray-300">
+                                <span>{c.name}</span>
+                                <span>{new Date(c.date).toLocaleDateString("fa-IR")}</span>
                             </div>
-                            <button onClick={() => approveComment(c.id)} className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                                تایید
+                            <p className="mb-2">{c.comment}</p>
+                            {c.status !== "approved" && (
+                                <button
+                                    onClick={() => approveComment(c.id)}
+                                    className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg mr-2"
+                                >
+                                    تایید
+                                </button>
+                            )}
+                            <button
+                                onClick={() => deleteComment(c.id)}
+                                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg"
+                            >
+                                حذف
                             </button>
                         </div>
                     ))

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function CommentsSection({ onAdminLogin }) {
+export default function CommentsSection() {
   const [formData, setFormData] = useState({ name: "", comment: "" });
   const [comments, setComments] = useState([]);
   const apiUrl = "https://comments-worker.mnzm1371.workers.dev";
@@ -49,6 +49,8 @@ export default function CommentsSection({ onAdminLogin }) {
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 text-right" dir="rtl">
       <div className="w-full max-w-4xl bg-gray-800/70 backdrop-blur-md rounded-2xl shadow-xl p-8 mb-8">
         <h2 className="text-3xl font-bold text-white mb-6 text-center">نظرات کاربران</h2>
+
+        {/* فرم ارسال نظر */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-10">
           <input
             type="text"
@@ -65,17 +67,24 @@ export default function CommentsSection({ onAdminLogin }) {
             className="border border-gray-600 rounded-lg px-4 py-3 h-32 resize-none bg-gray-700 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
           />
-          <button type="submit" className="bg-blue-600 text-white font-semibold rounded-lg px-6 py-3 hover:bg-blue-700 transition">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white font-semibold rounded-lg px-6 py-3 hover:bg-blue-700 transition"
+          >
             ارسال نظر
           </button>
         </form>
 
+        {/* نمایش نظرات */}
         <div className="space-y-5">
           {comments.length === 0 ? (
             <p className="text-gray-400 text-center">هنوز نظری ثبت نشده است.</p>
           ) : (
             comments.map((c) => (
-              <div key={c.id} className="border border-gray-700 rounded-lg p-4 bg-gray-700/60 text-gray-100">
+              <div
+                key={c.id}
+                className="border border-gray-700 rounded-lg p-4 bg-gray-700/60 text-gray-100"
+              >
                 <div className="flex justify-between mb-2 text-sm text-gray-400">
                   <span>{c.name}</span>
                   <span>{new Date(c.date).toLocaleDateString("fa-IR")}</span>
@@ -84,15 +93,6 @@ export default function CommentsSection({ onAdminLogin }) {
               </div>
             ))
           )}
-        </div>
-
-        <div className="mt-6 text-center">
-          <button
-            onClick={onAdminLogin}
-            className="bg-red-600 text-white font-semibold rounded-lg px-6 py-3 hover:bg-red-700 transition"
-          >
-            ورود مدیر
-          </button>
         </div>
       </div>
     </div>
