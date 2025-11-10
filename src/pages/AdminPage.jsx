@@ -2,25 +2,38 @@ import { useState, useEffect } from "react";
 
 export default function AdminPanel() {
     const [password, setPassword] = useState("");
+    const [token, setToken] = useState(null); // توکن مدیر
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [comments, setComments] = useState([]);
-    const apiUrl = "https://comments-worker.mnzm1371.workers.dev"; // URL Worker شما
+    const apiUrl = "https://comments-worker.mnzm1371.workers.dev";
 
-    // ورود مدیر
-    const handleLogin = () => {
-        // نمونه رمز: admin123
-        if (password === "admin123") {
-            setIsLoggedIn(true);
-            fetchComments();
-        } else {
-            alert("رمز اشتباه است!");
+    // ورود مدیر امن
+    const handleLogin = async () => {
+        try {
+            const res = await fetch(`${apiUrl}/admin-login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setToken(data.token);
+                setIsLoggedIn(true);
+                fetchComments(data.token);
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            console.error("خطا در ورود:", error);
         }
     };
 
-    // دریافت تمام نظرات (تایید شده و نشده)
-    const fetchComments = async () => {
+    // دریافت تمام نظرات
+    const fetchComments = async (tokenValue) => {
         try {
-            const res = await fetch(`${apiUrl}/all-comments`);
+            const res = await fetch(`${apiUrl}/all-comments`, {
+                headers: { Authorization: `Bearer ${tokenValue}` },
+            });
             const data = await res.json();
             setComments(data);
         } catch (error) {
@@ -31,8 +44,11 @@ export default function AdminPanel() {
     // تایید نظر
     const approveComment = async (id) => {
         try {
-            const res = await fetch(`${apiUrl}/approve/${id}`, { method: "POST" });
-            if (res.ok) fetchComments();
+            const res = await fetch(`${apiUrl}/approve/${id}`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) fetchComments(token);
         } catch (error) {
             console.error(error);
         }
@@ -41,8 +57,11 @@ export default function AdminPanel() {
     // حذف نظر
     const deleteComment = async (id) => {
         try {
-            const res = await fetch(`${apiUrl}/delete/${id}`, { method: "DELETE" });
-            if (res.ok) fetchComments();
+            const res = await fetch(`${apiUrl}/delete/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) fetchComments(token);
         } catch (error) {
             console.error(error);
         }
@@ -82,8 +101,8 @@ export default function AdminPanel() {
                         <div
                             key={c.id}
                             className={`p-4 rounded-lg border ${c.status === "approved"
-                                ? "border-green-500 bg-green-800/40"
-                                : "border-yellow-500 bg-yellow-800/40"
+                                    ? "border-green-500 bg-green-800/40"
+                                    : "border-yellow-500 bg-yellow-800/40"
                                 }`}
                         >
                             <div className="flex justify-between mb-2 text-sm text-gray-300">
