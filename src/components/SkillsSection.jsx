@@ -32,37 +32,39 @@ const skillsData = {
     ],
 };
 
+const categoryNames = {
+    frontend: "فرانت‌اند",
+    backend: "بک‌اند",
+    windows: "ویندوز",
+    tools: "ابزارها",
+};
+
 export default function SkillsTabs() {
     const [category, setCategory] = useState("frontend");
-    const categories = ["frontend", "backend", "windows", "tools"];
+    const categories = Object.keys(skillsData);
     const displayedSkills = skillsData[category];
 
-    const categoryNames = {
-        frontend: "فرانت‌اند",
-        backend: "بک‌اند",
-        windows: "ویندوز",
-        tools: "ابزارها",
-    };
-
     return (
-        <div
-            className="min-h-screen text-black dark:text-white flex flex-col items-center px-3 sm:px-6 py-8 sm:py-16"
+        <section
             id="skille"
             dir="rtl"
+            className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-10 sm:py-16 text-gray-900 dark:text-white transition-colors duration-700"
         >
-            <h1 className="text-2xl sm:text-4xl font-bold mb-6 sm:mb-10">
+            {/* عنوان */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-10 sm:mb-14 text-center">
                 مهارت‌های من
             </h1>
 
-            {/* دکمه‌های انتخاب مهارت */}
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8 sm:mb-10 flex-row-reverse">
-                {[...categories].reverse().map((cat) => (
+            {/* تب‌های دسته‌بندی */}
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-5 mb-8 sm:mb-12">
+                {categories.map((cat) => (
                     <button
                         key={cat}
                         onClick={() => setCategory(cat)}
-                        className={`px-3 sm:px-6 py-1 sm:py-2 rounded-full text-sm sm:text-lg font-semibold transition-all duration-300 ${category === cat
-                                ? "bg-blue-600 text-white shadow-lg scale-105"
-                                : "bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800"
+                        className={`px-5 sm:px-7 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-lg tracking-wide transition-all duration-300 
+              ${category === cat
+                                ? "bg-blue-600 text-white shadow-md shadow-blue-400/40 scale-105"
+                                : "border border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
                             }`}
                     >
                         {categoryNames[cat]}
@@ -70,30 +72,30 @@ export default function SkillsTabs() {
                 ))}
             </div>
 
-            {/* لیست مهارت‌ها */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-8 w-full max-w-6xl text-right justify-items-center">
+            {/* کارت مهارت‌ها */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 w-full max-w-6xl justify-items-center">
                 {displayedSkills.map((skill, index) => (
                     <div
                         key={index}
-                        className="w-11/12 sm:w-full rounded-xl sm:rounded-3xl p-3 sm:p-8 border border-white/10 shadow-[0_0_10px_rgba(0,123,255,0.3)] hover:shadow-[0_0_25px_rgba(0,123,255,0.7)] transition-all duration-300 hover:scale-105"
+                        className="w-11/12 sm:w-full bg-white/5 dark:bg-gray-800/40 backdrop-blur-md border border-white/10 rounded-2xl p-4 sm:p-6 shadow-[0_0_10px_rgba(0,123,255,0.3)] hover:shadow-[0_0_25px_rgba(0,123,255,0.7)] transition-all duration-300 hover:scale-[1.03]"
                     >
-                        <div className="flex justify-between mb-1 sm:mb-3">
-                            <span className="font-bold text-sm sm:text-xl">
-                                {skill.name}
-                            </span>
+                        <div className="flex justify-between items-center mb-2 sm:mb-4">
+                            <span className="font-bold text-sm sm:text-lg">{skill.name}</span>
                             <span className="text-blue-400 font-bold text-xs sm:text-base">
                                 {skill.level}٪
                             </span>
                         </div>
-                        <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-4 overflow-hidden">
+
+                        {/* نوار پیشرفت */}
+                        <div className="w-full bg-gray-700/50 rounded-full h-2 sm:h-3 overflow-hidden">
                             <div
-                                className="bg-blue-500 h-1.5 sm:h-4 rounded-full transition-all duration-500"
+                                className="bg-gradient-to-r from-blue-500 to-blue-300 h-2 sm:h-3 rounded-full transition-all duration-500 ease-out"
                                 style={{ width: `${skill.level}%` }}
-                            ></div>
+                            />
                         </div>
                     </div>
                 ))}
             </div>
-        </div>
+        </section>
     );
 }
